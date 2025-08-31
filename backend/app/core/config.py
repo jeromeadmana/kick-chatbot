@@ -19,3 +19,7 @@ class Settings(BaseSettings):
 settings = Settings()
 # convenience: list of origins
 CORS_ORIGIN_LIST = [o.strip() for o in settings.CORS_ORIGINS.split(",") if o.strip()]
+if settings.DATABASE_URL.startswith("postgres://"):
+    settings.DATABASE_URL = settings.DATABASE_URL.replace("postgres://", "postgresql+asyncpg://", 1)
+elif settings.DATABASE_URL.startswith("postgresql://") and "+asyncpg" not in settings.DATABASE_URL:
+    settings.DATABASE_URL = settings.DATABASE_URL.replace("postgresql://", "postgresql+asyncpg://", 1)
